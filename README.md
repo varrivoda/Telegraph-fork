@@ -1,64 +1,53 @@
-# Telegraph Java Library
-[![Telegram](http://trellobot.doomdns.org/telegrambadge.svg)](https://telegram.me/JavaBotsApi)
+## Telegraph Java Library
+## Written using Google Guice. Let's try to migrate it to Spring
 
-
-[![Build Status](https://travis-ci.org/rubenlagus/Telegraph.svg?branch=master)](https://travis-ci.org/rubenlagus/Telegraph)
-[![Jitpack](https://jitpack.io/v/rubenlagus/Telegraph.svg)](https://jitpack.io/#rubenlagus/Telegraph)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.telegram/telegraph/badge.svg)](http://mvnrepository.com/artifact/org.telegram/telegraph)
+Forked from [https://github.com/rubenlagus/Telegraph](https://github.com/rubenlagus/Telegraph)
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://github.com/rubenlagus/Telegraph/blob/master/LICENSE)
 
-A simple to use library to interact with Telegra.ph
+### Part 0. Failed to implement Spring forcely...
+Первая попытка "в лоб" заменить Guice на аналогичный функцмионал Спринга провалилась.
 
-## Contributions
-Feel free to fork this project, work on it and then make a pull request against **DEV** branch. Most of the times I will accept them if they add something valuable to the code.
+Вообще, в этой библиотеке применены довольно странные решения, которые во всех кругах признаны антипаттернами. Как-то: инжекция контекста вбизнес-логику и лукап, статические методы, очень странный паттерн executor-помесь с билдером. Создаются классы, которые ведут себякак статические... Надеюсь, во вселенной Guiceэто всё же не является нормой, надо спросить бывалых. Как правило, говорят, что Спринг с таким стилем не дружит, ну вот я и проверил это на себе лично =))
 
-Please, **DO NOT PUSH ANY TOKEN OR API KEY**, I will never accept a pull request with that content.
+Но при всем этом, идея автора хорошо прослеживается, компоненты хорошо структирированы и инкапсулированы, и скорее всего их легко тестировать.
 
-## Usage
+Короче. Надо взять вот эту замечательную структуру, дата-классы, эксепшены, валидаторы, json-хелперы - и поверх них написать нормальные объекты с нормальными методами.
 
-Just import the library to your project with one of these options:
+Пробежимся по функционалу библиотеки:
 
-  1. Using Maven Central Repository:
-
-```xml
-    <dependency>
-        <groupId>org.telegram</groupId>
-        <artifactId>telegraph</artifactId>
-        <version>1.0</version>
-    </dependency>
+```
+    // Create new account 
+    Account account = new CreateAccount("Test").setAuthorName("Apee").execute();
+    
+    // Edit account
+    Account editedAccount = new UserInfo(token).setAuthorName("User").setShortName("U").execute();
+    
+    // Get account info
+    editedAccount = new GetAccountInfo(token).execute();
+    
+    List<Node> content = List.of(new NodeText("My content"));
+    
+    // Create new page
+    Page page = new CreatePage(token, "Title", content).setAuthorName("Random").setReturnContent(true).execute();
+    
+    // Get page
+    page = new GetPage(page.getPath()).setReturnContent(true).execute();
+    
+    List<Node> tagContent = List.of(new NodeElement("p", new HashMap<>(), content));
+    
+    // Edit page
+    Page editedPage = new EditPage(token, page.getPath(), page.getTitle(), tagContent).setAuthorName("New Author").execute();
+    
+    // Get my pages list 
+    PageList pageList = new GetPageList(token).setLimit(10).execute();
+    
+    // Get page view
+    PageViews views = new GetViews(page.getPath()).setYear(2016).execute();
+    
+    // Revoke account token
+    Account revokedAccount = new RevokeAccessToken(token).execute();
 ```
 
-  2. Using Jitpack from [here](https://jitpack.io/#rubenlagus/Telegraph/v1.0)
-  3. Download the jar(including all dependencies) from [here](https://github.com/rubenlagus/Telegraph/releases/tag/v1.0)
+итого, имеем 5 методов, связанных с аккаунтом (create, edit, getInfo, getPagesList, revokeToken) и 4 метода, связанных со страницей (create, edit, get, getViews)
 
-
-For detailed explanation, visite our [How To](https://github.com/rubenlagus/Telegraph/blob/master/telegraph-sample/src/main/java/org/telegram/telegraph/sample/Main.java)
-
-## Telegraph API
-This library use [Telegraph API](https://telegraph.ph), you can find more information following the link.
-
-## Questions or Suggestions
-Feel free to create issues [here](https://github.com/rubenlagus/Telegraph/issues) as you need or join the [chat](https://telegram.me/JavaTelegraph)
-
-## License 
-MIT License
-
-Copyright (c) 2016 Ruben Bermudez
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+напрашивается делать что-то типа "Active record". Нонадопочитать, как у этого паттерна обстоят дела с удобством тестирования...
