@@ -1,4 +1,4 @@
-package org.telegram.telegraph.exceptions;
+package org.telegram.telegraph.api.methods.exceptions;
 
 import org.json.JSONObject;
 import org.telegram.telegraph.api.objects.TelegraphResponse;

@@ -1,64 +1,27 @@
-# Telegraph Java Library
-[![Telegram](http://trellobot.doomdns.org/telegrambadge.svg)](https://telegram.me/JavaBotsApi)
+## Telegraph Java Library
+## Written using Google Guice. Let's try to migrate it to Spring
 
-
-[![Build Status](https://travis-ci.org/rubenlagus/Telegraph.svg?branch=master)](https://travis-ci.org/rubenlagus/Telegraph)
-[![Jitpack](https://jitpack.io/v/rubenlagus/Telegraph.svg)](https://jitpack.io/#rubenlagus/Telegraph)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.telegram/telegraph/badge.svg)](http://mvnrepository.com/artifact/org.telegram/telegraph)
+Forked from [https://github.com/rubenlagus/Telegraph](https://github.com/rubenlagus/Telegraph)
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](https://github.com/rubenlagus/Telegraph/blob/master/LICENSE)
 
-A simple to use library to interact with Telegra.ph
-
-## Contributions
-Feel free to fork this project, work on it and then make a pull request against **DEV** branch. Most of the times I will accept them if they add something valuable to the code.
-
-Please, **DO NOT PUSH ANY TOKEN OR API KEY**, I will never accept a pull request with that content.
-
-## Usage
-
-Just import the library to your project with one of these options:
-
-  1. Using Maven Central Repository:
-
-```xml
-    <dependency>
-        <groupId>org.telegram</groupId>
-        <artifactId>telegraph</artifactId>
-        <version>1.0</version>
-    </dependency>
-```
-
-  2. Using Jitpack from [here](https://jitpack.io/#rubenlagus/Telegraph/v1.0)
-  3. Download the jar(including all dependencies) from [here](https://github.com/rubenlagus/Telegraph/releases/tag/v1.0)
 
 
-For detailed explanation, visite our [How To](https://github.com/rubenlagus/Telegraph/blob/master/telegraph-sample/src/main/java/org/telegram/telegraph/sample/Main.java)
+Для начала, из коробки не работает. 
+Надо поправить версию Guice на 5.0.1
+А, еще исходный проект написан на java8... Ну да ладно, работает, обойдусь без List.of() :)
 
-## Telegraph API
-This library use [Telegraph API](https://telegraph.ph), you can find more information following the link.
+Первым делом надо обратить внимание на TelegraphContext, а именно на конфиг ApiModule.
+Ничего необычного, инициализация бинов и синглтонов. По идее можно просто все вырезать, и чинить с помощью Спринга все что сломается.
 
-## Questions or Suggestions
-Feel free to create issues [here](https://github.com/rubenlagus/Telegraph/issues) as you need or join the [chat](https://telegram.me/JavaTelegraph)
+добавим в pom Спринг 5.2.25.RELEASE, потому что ону меня уже есть скачанный :)
 
-## License 
-MIT License
+в демке уберем контекст Джуса и создадим спринговый контекст, зарегистрируем туда все что надо, везде где можно ставим аннотации @Component, пишем конфиг класс....
 
-Copyright (c) 2016 Ruben Bermudez
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Конечно же всё сломалось. Вообще архитектура данной библиотеки очень странная. Например, есть абстрактный класс TelegraphMethod, который наследуют различные другие классы, по сути являющиеся методами. То есть чтобы совершить какое-либо действие,например создать новую страницу, нужно создать new CreatePage, засетить в неё нужные поля и вызвать метод execute, который берет из контекста Executor......
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Всёэто приправлено классами,которые ведут себякак статические, статическими методами, постоянно везде достается вручнуюиз контекста.... вобщем, сплошные антипаттерны. Такое себе первое знакомство с Guice!
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+Однако при всем этом, идеяавтора хорошо прослеживается, компоненты хорошо структирированы и инкапсулированы, и скорее всего их легко тестировать. Что наводит на нехорогшие мысли о Guice, надо спросить у бывалых - может быть, на нем всегда так принято писать? =)
+
+Короче. Надо взять вот эту замечательную структуру, почти все классы, эксепшены, валидаторы, json-хелперы, и поверх всего этого написать нормальные объекты с нормальными методами, чтото типа паттерна Active Record. Ветку закрываю

@@ -1,8 +1,9 @@
 package org.telegram.telegraph.executors;
 
+import org.springframework.stereotype.Component;
 import org.telegram.telegraph.api.TelegraphMethod;
 import org.telegram.telegraph.api.TelegraphObject;
-import org.telegram.telegraph.exceptions.TelegraphException;
+import org.telegram.telegraph.api.methods.exceptions.TelegraphException;
 
 /**
  * @author Ruben Bermudez
@@ -10,6 +11,7 @@ import org.telegram.telegraph.exceptions.TelegraphException;
  * Base interface to execute a method, support any custom implementation. Library will create instances of this class
  * via TelegraphExecutorFactory when necessary.
  */
+@Component
 public interface TelegraphExecutor {
     /**
      * Executes a method and returns its result

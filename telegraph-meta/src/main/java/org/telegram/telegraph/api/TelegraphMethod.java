@@ -4,10 +4,15 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.telegram.telegraph.TelegraphContext;
-import org.telegram.telegraph.exceptions.TelegraphException;
-import org.telegram.telegraph.exceptions.TelegraphRequestException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.stereotype.Component;
+import org.telegram.telegraph.api.methods.exceptions.TelegraphException;
+import org.telegram.telegraph.api.methods.exceptions.TelegraphRequestException;
 import org.telegram.telegraph.executors.TelegraphExecutorFactory;
+
+import javax.annotation.PostConstruct;
 
 /**
  * @author Ruben Bermudez
@@ -15,9 +20,18 @@ import org.telegram.telegraph.executors.TelegraphExecutorFactory;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public abstract class TelegraphMethod<T extends TelegraphObject> implements Validable {
+@Component
+public abstract class TelegraphMethod<T extends TelegraphObject> implements Validable, ApplicationContextAware {
     @JsonIgnore
     protected static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
+    @Autowired
+    ApplicationContext applicationContext;
+
+    @PostConstruct
+    public void setApplicationContext(ApplicationContext context){
+        this.applicationContext = context;
+    }
 
     /**
      * Deserialize a json answer to the response type to a method
@@ -40,7 +54,10 @@ public abstract class TelegraphMethod<T extends TelegraphObject> implements Vali
      */
     public T execute() throws TelegraphException {
         validate();
-        return TelegraphContext.getInstance(TelegraphExecutorFactory.class)
-                .getExecutor().execute(this);
+//        return TelegraphContext.getInstance(TelegraphExecutorFactory.class)
+//                .getExecutor().execute(this);
+        //Object o = applicationContext.getBean(TelegraphExecutorFactory.class);
+        //System.out.println(o);
+        return applicationContext.getBean(TelegraphExecutorFactory.class).getExecutor().execute(this);
     }
 }

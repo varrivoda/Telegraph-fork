@@ -1,12 +1,14 @@
 package org.telegram.telegraph.api.objects;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import org.springframework.stereotype.Component;
 import org.telegram.telegraph.jsonutilities.NodeTextSerializer;
 
 /**
  * @author Ruben Bermudez
  * @version 1.0
  */
+@Component
 @JsonSerialize(using = NodeTextSerializer.class)
 public class NodeText extends Node {
     private String content;

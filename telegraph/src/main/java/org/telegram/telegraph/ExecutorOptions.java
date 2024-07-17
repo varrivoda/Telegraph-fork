@@ -2,15 +2,18 @@ package org.telegram.telegraph;
 
 import com.google.inject.Inject;
 import org.apache.http.client.config.RequestConfig;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Ruben Bermudez
  * @version 1.0
  */
+@Component
 public class ExecutorOptions {
     private RequestConfig requestConfig;
 
-    @Inject
+    @Autowired
     public ExecutorOptions() {
     }
 

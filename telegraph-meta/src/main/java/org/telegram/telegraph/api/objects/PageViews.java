@@ -1,12 +1,14 @@
 package org.telegram.telegraph.api.objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.stereotype.Component;
 import org.telegram.telegraph.api.TelegraphObject;
 
 /**
  * @author Ruben Bermudez
  * @version 1.0
  */
+@Component
 public class PageViews implements TelegraphObject {
     private static final String VIEWS_FIELD = "views";
 

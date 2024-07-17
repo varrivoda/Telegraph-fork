@@ -2,6 +2,7 @@ package org.telegram.telegraph.api;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 
@@ -12,5 +13,6 @@ import java.io.Serializable;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Component
 public interface TelegraphObject extends Serializable {
 }

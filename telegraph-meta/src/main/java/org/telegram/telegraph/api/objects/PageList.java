@@ -1,6 +1,7 @@
 package org.telegram.telegraph.api.objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.stereotype.Component;
 import org.telegram.telegraph.api.TelegraphObject;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
  * @version 1.0
  * This object represents a list of Telegraph articles belonging to an account. Most recently edited articles first.
  */
+@Component
 public class PageList implements TelegraphObject {
     private static final String TOTAL_COUNT_FIELD = "total_count";
     private static final String PAGES_FIELD = "pages";

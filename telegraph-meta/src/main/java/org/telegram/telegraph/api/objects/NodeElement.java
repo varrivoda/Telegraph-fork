@@ -1,6 +1,7 @@
 package org.telegram.telegraph.api.objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,7 @@ import java.util.Map;
  * @version 1.0
  * This object represents a DOM element node.
  */
+@Component
 public class NodeElement extends Node {
     public static final String TAG_FIELD = "tag";
     public static final String ATTRS_FIELD = "attrs";

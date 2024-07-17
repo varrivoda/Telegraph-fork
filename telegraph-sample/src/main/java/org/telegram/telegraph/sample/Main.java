@@ -1,12 +1,17 @@
 package org.telegram.telegraph.sample;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Lazy;
 import org.telegram.telegraph.ExecutorOptions;
-import org.telegram.telegraph.TelegraphContext;
-import org.telegram.telegraph.TelegraphContextInitializer;
 import org.telegram.telegraph.TelegraphLogger;
+import org.telegram.telegraph.api.TelegraphMethod;
 import org.telegram.telegraph.api.methods.*;
 import org.telegram.telegraph.api.objects.*;
-import org.telegram.telegraph.exceptions.TelegraphException;
+import org.telegram.telegraph.api.methods.exceptions.TelegraphException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,18 +20,32 @@ import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 
 /**
+ * 123
  * @author Ruben Bermudez
  * @version 1.0
  */
+
+@ComponentScan(basePackages={"org.telegram.telegraph"})
+@Lazy(false)
 public class Main {
+    @Autowired ConfigurableListableBeanFactory beanFactory;
+
     public static void main(String[] args) {
         // Set up logger
         TelegraphLogger.setLevel(Level.ALL);
         TelegraphLogger.registerLogger(new ConsoleHandler());
 
+
+
         // Initialize context
-        TelegraphContextInitializer.init();
-        TelegraphContext.registerInstance(ExecutorOptions.class, new ExecutorOptions());
+//        TelegraphContextInitializer.init();
+//        TelegraphContext.registerInstance(ExecutorOptions.class, new ExecutorOptions());
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+        context.registerBean(ExecutorOptions.class, new ExecutorOptions());
+        context.registerBean(TelegraphMethod.class);
+
+
+
 
         try {
             // Create account
@@ -78,6 +97,9 @@ public class Main {
 
             // Revoke account token
             Account revokedAccount = new RevokeAccessToken(account.getAccessToken()).execute();
+
+            System.out.println(editedPage.getUrl());
+
         } catch (TelegraphException e) {
             TelegraphLogger.severe("MAIN", e);
         }

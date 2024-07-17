@@ -1,6 +1,7 @@
 package org.telegram.telegraph.api.objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 
@@ -8,6 +9,7 @@ import java.io.Serializable;
  * @author Ruben Bermudez
  * @version 1.0
  */
+@Component
 public class TelegraphResponse<T> implements Serializable {
     private static final String OK_FIELD = "ok";
     private static final String ERROR_FIELD = "error";

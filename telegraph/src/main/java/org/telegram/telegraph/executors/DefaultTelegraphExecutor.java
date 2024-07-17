@@ -13,12 +13,15 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 import org.telegram.telegraph.ExecutorOptions;
 import org.telegram.telegraph.TelegraphConstants;
 import org.telegram.telegraph.api.TelegraphMethod;
 import org.telegram.telegraph.api.TelegraphObject;
-import org.telegram.telegraph.exceptions.TelegraphException;
-import org.telegram.telegraph.exceptions.TelegraphRequestException;
+import org.telegram.telegraph.api.methods.exceptions.TelegraphException;
+import org.telegram.telegraph.api.methods.exceptions.TelegraphRequestException;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -28,12 +31,13 @@ import java.util.concurrent.TimeUnit;
  * @author Ruben Bermudez
  * @version 1.0
  */
+@Component
 public class DefaultTelegraphExecutor implements TelegraphExecutor {
     private final ObjectMapper objectMapper;
     private volatile CloseableHttpClient httpclient;
     private volatile RequestConfig requestConfig;
 
-    @Inject
+    @Autowired
     public DefaultTelegraphExecutor(ExecutorOptions options) {
         this.objectMapper = new ObjectMapper();
         httpclient = HttpClientBuilder.create()
