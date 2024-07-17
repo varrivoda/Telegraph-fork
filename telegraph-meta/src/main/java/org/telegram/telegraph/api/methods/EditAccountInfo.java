@@ -2,11 +2,14 @@ package org.telegram.telegraph.api.methods;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 import org.telegram.telegraph.api.TelegraphMethod;
 import org.telegram.telegraph.api.objects.Account;
 import org.telegram.telegraph.api.objects.TelegraphResponse;
-import org.telegram.telegraph.exceptions.TelegraphRequestException;
-import org.telegram.telegraph.exceptions.TelegraphValidationException;
+import org.telegram.telegraph.api.methods.exceptions.TelegraphRequestException;
+import org.telegram.telegraph.api.methods.exceptions.TelegraphValidationException;
 
 import java.io.IOException;
 
@@ -17,6 +20,7 @@ import java.io.IOException;
  * Pass only the parameters that you want to edit. On success,
  * returns an Account object with the default fields.
  */
+@Component
 public class EditAccountInfo extends TelegraphMethod<Account> {
     private static final String URL_PATH = "editAccountInfo";
 
@@ -118,5 +122,10 @@ public class EditAccountInfo extends TelegraphMethod<Account> {
                 ", authorName='" + authorName + '\'' +
                 ", authorUrl='" + authorUrl + '\'' +
                 '}';
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+
     }
 }

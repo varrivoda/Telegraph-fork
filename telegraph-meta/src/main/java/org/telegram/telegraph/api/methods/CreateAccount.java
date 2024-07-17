@@ -2,11 +2,14 @@ package org.telegram.telegraph.api.methods;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 import org.telegram.telegraph.api.TelegraphMethod;
 import org.telegram.telegraph.api.objects.Account;
 import org.telegram.telegraph.api.objects.TelegraphResponse;
-import org.telegram.telegraph.exceptions.TelegraphRequestException;
-import org.telegram.telegraph.exceptions.TelegraphValidationException;
+import org.telegram.telegraph.api.methods.exceptions.TelegraphRequestException;
+import org.telegram.telegraph.api.methods.exceptions.TelegraphValidationException;
 
 import java.io.IOException;
 
@@ -18,6 +21,7 @@ import java.io.IOException;
  * author names and links for each of their channels. On success, returns an Account
  * object with default fields and an additional access_token field.
  */
+@Component
 public class CreateAccount extends TelegraphMethod<Account> {
     private static final String URL_PATH = "createAccount";
 
@@ -103,5 +107,10 @@ public class CreateAccount extends TelegraphMethod<Account> {
                 ", authorName='" + authorName + '\'' +
                 ", authorUrl='" + authorUrl + '\'' +
                 '}';
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+
     }
 }

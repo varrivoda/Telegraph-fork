@@ -1,4 +1,4 @@
-package org.telegram.telegraph.exceptions;
+package org.telegram.telegraph.api.methods.exceptions;
 
 import org.telegram.telegraph.api.TelegraphMethod;
 import org.telegram.telegraph.api.TelegraphObject;

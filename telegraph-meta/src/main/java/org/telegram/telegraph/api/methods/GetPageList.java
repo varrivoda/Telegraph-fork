@@ -2,11 +2,14 @@ package org.telegram.telegraph.api.methods;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 import org.telegram.telegraph.api.TelegraphMethod;
 import org.telegram.telegraph.api.objects.PageList;
 import org.telegram.telegraph.api.objects.TelegraphResponse;
-import org.telegram.telegraph.exceptions.TelegraphRequestException;
-import org.telegram.telegraph.exceptions.TelegraphValidationException;
+import org.telegram.telegraph.api.methods.exceptions.TelegraphRequestException;
+import org.telegram.telegraph.api.methods.exceptions.TelegraphValidationException;
 
 import java.io.IOException;
 
@@ -16,6 +19,7 @@ import java.io.IOException;
  * Use this method to get a list of pages belonging to a Telegraph account.
  * Returns a PageList object, sorted by most recently created pages first.
  */
+@Component
 public class GetPageList extends TelegraphMethod<PageList> {
     private static final String URL_PATH = "getPageList";
 
@@ -98,5 +102,10 @@ public class GetPageList extends TelegraphMethod<PageList> {
                 ", offset=" + offset +
                 ", limit=" + limit +
                 '}';
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+
     }
 }

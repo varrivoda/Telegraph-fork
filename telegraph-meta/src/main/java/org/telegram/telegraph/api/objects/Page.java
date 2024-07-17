@@ -1,6 +1,7 @@
 package org.telegram.telegraph.api.objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.stereotype.Component;
 import org.telegram.telegraph.api.TelegraphObject;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
  * @version 1.0
  * This object represents a page on Telegraph.
  */
+@Component
 public class Page implements TelegraphObject {
     private static final String PATH_FIELD = "path";
     private static final String URL_FIELD = "url";

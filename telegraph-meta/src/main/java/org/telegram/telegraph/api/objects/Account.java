@@ -1,6 +1,7 @@
 package org.telegram.telegraph.api.objects;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.stereotype.Component;
 import org.telegram.telegraph.api.TelegraphObject;
 
 /**
@@ -8,6 +9,7 @@ import org.telegram.telegraph.api.TelegraphObject;
  * @version 1.0
  * This object represents a Telegraph account.
  */
+@Component
 public class Account implements TelegraphObject {
     private static final String SHORT_NAME_FIELD = "short_name";
     private static final String AUTHOR_NAME_FIELD = "author_name";

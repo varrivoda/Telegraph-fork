@@ -2,11 +2,14 @@ package org.telegram.telegraph.api.methods;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 import org.telegram.telegraph.api.TelegraphMethod;
 import org.telegram.telegraph.api.objects.Account;
 import org.telegram.telegraph.api.objects.TelegraphResponse;
-import org.telegram.telegraph.exceptions.TelegraphRequestException;
-import org.telegram.telegraph.exceptions.TelegraphValidationException;
+import org.telegram.telegraph.api.methods.exceptions.TelegraphRequestException;
+import org.telegram.telegraph.api.methods.exceptions.TelegraphValidationException;
 
 import java.io.IOException;
 
@@ -18,6 +21,7 @@ import java.io.IOException;
  * or you have reasons to believe the token was compromised.
  * On success, returns an Account object with new access_token and auth_url fields.
  */
+@Component
 public class RevokeAccessToken extends TelegraphMethod<Account> {
     private static final String URL_PATH = "revokeAccessToken";
 
@@ -71,5 +75,10 @@ public class RevokeAccessToken extends TelegraphMethod<Account> {
         return "RevokeAccessToken{" +
                 "accessToken='" + accessToken + '\'' +
                 '}';
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+
     }
 }

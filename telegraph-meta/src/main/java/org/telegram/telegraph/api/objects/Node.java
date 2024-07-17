@@ -1,6 +1,7 @@
 package org.telegram.telegraph.api.objects;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.springframework.stereotype.Component;
 import org.telegram.telegraph.api.TelegraphObject;
 import org.telegram.telegraph.jsonutilities.NodeDeserializer;
 
@@ -9,6 +10,7 @@ import org.telegram.telegraph.jsonutilities.NodeDeserializer;
  * @version 1.0
  * This abstract object represents a DOM Node. It can be a String which represents a DOM text node or a NodeElement object.
  */
+@Component
 @JsonDeserialize(using = NodeDeserializer.class)
 public abstract class Node implements TelegraphObject {
 }

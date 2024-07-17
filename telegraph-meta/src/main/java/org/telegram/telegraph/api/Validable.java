@@ -1,11 +1,13 @@
 package org.telegram.telegraph.api;
 
-import org.telegram.telegraph.exceptions.TelegraphValidationException;
+import org.springframework.stereotype.Component;
+import org.telegram.telegraph.api.methods.exceptions.TelegraphValidationException;
 
 /**
  * @author Ruben Bermudez
  * @version 1.0
  */
+@Component
 public interface Validable {
     /**
      * Validates that mandatory fields are filled and optional objects
